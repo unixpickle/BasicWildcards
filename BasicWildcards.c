@@ -43,18 +43,21 @@ int strwcard (char * pattern, char * matches) {
 			} else {
 				char * npattern = &pattern[j + 1];
 				int npatternlen = 0;
+				// find the rest of the wildcard here.
+				// we will then check it against the remaining string.
 				for (j2 = j + 1; j2 < len1; j2++) {
 					char c = pattern[j2];
-					if (c == '*' || c == 0) {
+					if (c == 0) {
 						break;
 					} else npatternlen += 1;
 				}
 				j += npatternlen;
 				int good = 0;
 				// go until end of pattern
-				for (i1 = (len2 - npatternlen); i1 >= i; i1--) {
-					if (bcomp(npattern, &matches[i1], npatternlen) == 0) {
+				for (i1 = len2 - 1; i1 >= i; i1--) {
+					if (strwcard(npattern, &matches[i1]) == 0) {
 						good = 1;
+						return 0;
 						i = i1 + npatternlen;
 						break;
 					}
